@@ -54,7 +54,7 @@ void deck_init(struct deck* d)
 
 	for (int i = 0; i < MAX_DECK_SIZE; i++)
 	{
-		struct tile *t = malloc(sizeof(strucj'ai t tile));
+		struct tile *t = malloc(sizeof(struct tile));
 		t->i = i;
 		t->edges[NORTH] = color_from_name(colors_names[(i / (C * C * C)) % C]);
 		t->edges[SOUTH] = color_from_name(colors_names[(i / (C * C)) % C]);
