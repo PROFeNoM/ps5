@@ -1,21 +1,24 @@
 CFLAGS = -Wall -Wextra -std=c99
+DEP = src/utils_color.h src/utils_tile.h src/color.h src/tile.h src/player.h
+OBJ = utils_color.o color.o tile.o player.o
 
 all: project
 
-project: tile.o color.o main.o
-	gcc -o project main.o color.o tile.o
+project: $(OBJ) tilings.o
+	gcc -o project tilings.o utils_color.o color.o tile.o
 
-#tile.o: src/tile.c src/ansi.h
-#	gcc $(CFLAGS) -o tile.o -c src/tile.c
-
-#color.o: src/color.c src/ansi.h
-#	gcc $(CFLAGS) -o color.o -c src/color.c
-
-#main.o: src/main.c src/color.h src/tile.h
-#	gcc $(CFLAGS) -o main.o -c src/main.c
-
-%.o: src/%.c
+%.o: src/%.c $(DEP)
 	gcc $(CFLAGS) -o $@ -c $<
+
+test: test_tile test_player
+
+test_tile:
+	gcc $(CFLAGS) -o test_tile tst/test_tile.c src/tile.c src/utils_color.c src/color.c && ./test_tile
+	rm test_tile
+
+test_player:
+	gcc $(CFLAGS) -o test_player tst/test_player.c src/tile.c src/utils_color.c src/color.c && ./test_player
+	rm test_player
 
 clean:
 	rm -f *.o

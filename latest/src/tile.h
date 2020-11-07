@@ -39,4 +39,32 @@ struct color* tile_edge(const struct tile* t, enum direction d);
 // A function that fills a deck with tiles
 void deck_init(struct deck* d);
 
+
+// while we don't add it in param, i define hear the board lenth equal to 50
+#define BOARD_LENTH 10
+
+struct boards
+{
+	int mat_of_tile[BOARD_LENTH][BOARD_LENTH];
+	int dispo[BOARD_LENTH][BOARD_LENTH];      //both will be combine in a 3 dimension array
+};
+//the board will be defined with 2 matrice of on numbers which represent emplacement for tiles
+//the first have the information on the color on each of its edges
+//The second matrice, dispo, is made of numbers named here, "d", wich countain the information
+//of the disponibility of an edge of the corresponding emplacement
+//the disponibility of an edge can be obtain form d with :
+   //dipo_north = d/(3*3*3) %3
+   //d_s = d/(3*3) %3
+   //d_e = d/3 %3
+   //d_w = d %3
+   //d_? = "0" means that the edge is disponible, "1" that it isn't, and 2 that the emplacement is already taken
+   //for example d=0 means that all edges are dispo.,
+   //d=1 means that a special color is required on the west edge,
+   //d=80 means that the emplacement is taken
+   //NOTE: so to add a dependance on north : +27, on south : +9, on east : +3, on west : +1
+//
+//an edge that is disponible may countain a random color but it will be ignored when trying to find a matching tile
+
+void board_init(struct boards *board, const struct tile *t);
+
 #endif // _TILE_H_

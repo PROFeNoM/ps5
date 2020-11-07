@@ -3,50 +3,8 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "../src/tile.h"
-#include "../src/color.h"
-#include "../src/ansi.h"
-
-// TODO: Remove these structs (move it) as soon as they're implemented in a header
-
-// Temporary
-struct tile
-{
-	int i; // Decimal (unique) representation of the Wang tile
-	struct color* edges[4]; // Colors of the Wang tile edges
-};
-
-// Temporary
-struct color
-{
-	int c; // Decimal representation of the color
-	char* name; // Name of the color
-};
-
-// Temporary
-struct color colors_struct[MAX_COLORS] =
-		{
-				{ 0, "BLACK" },
-				{ 1, "RED" },
-				{ 2, "GREEN" },
-				{ 3, "YELLOW" },
-				{ 4, "BLUE" },
-				{ 5, "MAGENTA" },
-				{ 6, "CYAN" },
-				{ 7, "WHITE" },
-				{ 8, "NAVY" },
-				{ 9, "DARK_GREEN" },
-				{ 10, "DARK_RED" },
-				{ 11, "PURPLE" },
-				{ 12, "BROWN" },
-				{ 13, "KAKHI" },
-				{ 14, "PALE_BLUE" },
-				{ 15, "PALE_PURPLE" },
-				{ 16, "ORANGE" },
-				{ 17, "PALE_GREEN" },
-				{ 18, "PINK" },
-				{ 19, "GOLDEN" }
-		};
+#include "../src/utils_tile.h"
+#include "../src/utils_color.h"
 
 void display_result(int passed, int tested, char* func_name)
 {
@@ -65,7 +23,7 @@ void test_tile_is_empty()
 
 	int expected, actual;
 
-	// [1] : Test with an empty tile
+	// [1] : Test with an null tile
 	tested++;
 	const struct tile* t1 = NULL;
 	expected = 1;
@@ -78,16 +36,11 @@ void test_tile_is_empty()
 				expected, actual);
 	}
 
-	// TODO: change tile_is_empty so it checks memory address with empty tile's one
-
 	// [2] : Test with an empty tile
 	tested++;
-	const struct tile t11 = {};
+	const struct tile *t11 = empty_tile();
 	expected = 1;
-	//const struct tile *t12 = &t11;
-	//printf("%zd %zd %zd %p %p %p %d, %d\n",
-	//		sizeof(t1), sizeof(t11), sizeof(t11.i), &t11, &t1, t12, t12 == &t11, t1 == &t11);
-	actual = tile_is_empty(&t11);
+	actual = tile_is_empty(t11);
 	if (expected == actual)
 		passed++;
 	else
@@ -145,7 +98,6 @@ void test_tile_equals()
 
 	int expected, actual;
 
-	// TODO: make_tile() to make it easier creating tiles
 
 	// [1] (C: 20)
 	tested++;
@@ -397,7 +349,7 @@ void test_deck_init(int seed)
 	int is_empty = 0,
 			is_edge_valid = 1,
 			is_handling_duplicate = 1;
-	for (int i = 0, s = 0; s < deck.size; s += deck.cards[i++].n)
+	for (unsigned int i = 0, s = 0; s < deck.size; s += deck.cards[i++].n)
 	{
 		// [1]
 		if (tile_is_empty(deck.cards[i].t))
@@ -420,9 +372,9 @@ void test_deck_init(int seed)
 			}
 
 		// [2.2]
-		int cnt = 0;
-		for (int ii = 0, ss = 0; ss < deck.size; ss += deck.cards[ii++].n)
-			cnt += tile_equals(deck.cards[ii].t, deck.cards[i].t);
+		unsigned int cnt = 0;
+		for (unsigned int ii = 0, ss = 0; ss < deck.size; ss += deck.cards[ii++].n)
+			cnt += tile_equals(deck.cards[ii].t, deck.cards[i].t) * deck.cards[ii].n;
 		if (cnt != deck.cards[i].n)
 		{
 			printf("[deck_init][2.2][seed: %d] cnt = %d // n = %d\n",
@@ -441,6 +393,23 @@ void test_deck_init(int seed)
 	tested++;
 
 	display_result(passed, tested, "deck_init");
+
+	if (tested != passed)
+	{
+		for (unsigned int i = 0, s = 0; s < deck.size; i++)
+		{
+			printf("tile %d [%d]\n", i, deck.cards[i].n);
+			for (int d = 0; d < MAX_DIRECTION; d++)
+			{
+				const char* edge = color_cstring(tile_edge(deck.cards[i].t, d));
+				printf("->%s\n", edge);
+				free((char*)edge);
+			}
+			puts("\n");
+
+			s += deck.cards[i].n;
+		}
+	}
 }
 
 int main(int argc, char* argv[])

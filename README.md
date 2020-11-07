@@ -21,8 +21,7 @@
 - (Equipe) Début de rédaction des fichiers tile.c, color.c et rédaction d'un premier main.c
 - (Equipe) Documentation sur les *makefiles*, et création d'une première version du makefile du projet 
 
-### Taches, Objectif et planning
-#### A court terme
+### Tâches, Objectif et planning
 - création de *test* par la machine (sur les différentes parties, tuiles, deck,...)
 
 - reflexion sur la répartition des *tiles* pour chaque joueurs et implémentation des structures *files*
@@ -34,8 +33,20 @@
 	- initialisation (qui pose la première et ou)
 	- limites et autre
 
-#### A long terme / Boîte à idée
-- comment determiner ou non la possibilité de placer une tuile (liste_authorized_places)
-- 
+## [6 nov. 2020][Paul DEBRAIX]
 
+### Travail effectué
+- (Paul) Travail sur l'implémentation de *player.c*, début d'un fichier *test_player.c*
+- (Alexandre) Début des tests pour *tile.c* dans un fichier *test_tile.c*
+- (Guillaume) Avancement sur comment représenter la *board* notamment comment représenter une case vide
 
+### Tâches, Objectifs
+- Header plus général regroupant toutes les structures nécessaires
+	- Array of struct pour les couleurs
+- Création achiev0 et lien latest
+- Définition d'un tuile *vide* et modifications en conséquences
+- Définir globalement C le nbr de couleurs
+- Comment determiner ou non la possibilité de placer une tuile (liste_authorized_places)
+
+# A long terme / Boîte à idée
+- mieux comprendre les *malloc* et comment les éviter
