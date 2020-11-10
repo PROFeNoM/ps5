@@ -39,4 +39,4 @@ struct color* tile_edge(const struct tile* t, enum direction d);
 // A function that fills a deck with tiles
 void deck_init(struct deck* d);
 
-#endif // _TILE_H_
+#endif
